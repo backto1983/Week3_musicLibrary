@@ -2,21 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title></title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <title>Album Details</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
     <body>
         <main class="container">
             <h1>Album Details</h1>
             <?php
-                if (!empty($_GET['albumID']))
+                if (!empty($_GET['albumID'])) //If albumID is not empty, populate it
                     $albumID = $_GET['albumID'];
                 else
                     $albumID = null;
-                $title = null;
-                $year = null;
-                $artist = null;
-                $genrePicked = null;
+                    $title = null;
+                    $year = null;
+                    $artist = null;
+                    $genrePicked = null;
 
                 if (!empty($albumID)) {
                     $conn = new PDO('mysql:host=aws.computerstudi.es;dbname=gc200358165', 'gc200358165','lyXAs4jl8F');
@@ -40,7 +40,7 @@
 
                 <fieldset class="from-group">
                     <label for="year" class="col-sm-1">Year:</label>
-                    <input name="year" id="year" type="number" min="1900" placeholder="Release Year" value="<?php echo $year ?>"/>
+                    <input name="year" id="year" type="number" min="1900" placeholder="Year Released" value="<?php echo $year ?>"/>
                 </fieldset>
 
                 <fieldset class="form-group">
@@ -52,32 +52,33 @@
                     <label for="genre" class="col-sm-1">Genre: *</label>
                     <select name="genre" id="genre">
                         <?php
-                        //Connect to the database
-                        $conn = new PDO('mysql:host=aws.computerstudi.es;dbname=gc200358165', 'gc200358165','lyXAs4jl8F');
-                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //$conn->setAttribute(attribute: PDO::ERRMODE_EXCEPTION); --> mistake??
-                        //Create the SQL statement
-                        $sql = "SELECT * FROM genres";
-                        //Prepare and execute the SQL statement
-                        $cmd = $conn->prepare($sql);
-                        $cmd->execute();
-                        $genres = $cmd->fetchAll();
-                        //Loop over the results to build the list
-                        foreach ($genres as $genre)
-                        {
-                            if ($genrePicked == $genre['genre'])
-                                echo '<option selected>'.$genre['genre'].'</option>';
-                            else
-                                echo '<option>'.$genre['genre'].'</option>';
-                        }
-                        //Disconnect from the database
-                        $conn = null;
+                            //Connect to the database
+                            $conn = new PDO('mysql:host=aws.computerstudi.es;dbname=gc200358165', 'gc200358165','lyXAs4jl8F');
+                            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //$conn->setAttribute(attribute: PDO::ERRMODE_EXCEPTION); --> mistake??
+                            //Create the SQL statement
+                            $sql = "SELECT * FROM genres";
+                            //Prepare and execute the SQL statement
+                            $cmd = $conn->prepare($sql);
+                            $cmd->execute();
+                            $genres = $cmd->fetchAll();
+                            //Loop over the results to build the list
+                            foreach ($genres as $genre)
+                            {
+                                if ($genrePicked == $genre['genre'])
+                                    echo '<option selected>'.$genre['genre'].'</option>';
+                                else
+                                    echo '<option>'.$genre['genre'].'</option>';
+                            }
+                            //Disconnect from the database
+                            $conn = null;
                         ?>
                     </select>
                 </fieldset>
+                <input name="albumID" id="albumID" value="<?php echo $albumID ?>" type="hidden"/>
                 <button class="btn btn-success col-sm-offset-1">Save</button>
             </form>
         </main>
     </body>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"></script>
 </html>
 
