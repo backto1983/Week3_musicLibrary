@@ -1,9 +1,8 @@
-<?php ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Saving Album...</title>
+        <title>Saving Album</title>
     </head>
     <body>
         <?php
@@ -13,14 +12,18 @@
             $artist = $_POST['artist'];
             $genre = $_POST['genre'];
 
-            $conn = new PDO('mysql:host=aws.computerstudi.es;dbname=gc200358165', 'gc200358165','lyXAs4jl8F');
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            require_once ('db.php');
 
             if (!empty($albumID)) {
-                $sql = "UPDATE albums SET title = :title, year = :year, artist = :artist, genre = :genre WHERE albumID = :albumID";}
-            else {
-                $sql = "INSERT INTO albums (title, year, artist, genre) VALUES (:title, :year, :artist, :genre)";
+                $sql = "UPDATE albums  
+                               SET title = :title,
+                                   year = :year,
+                                   artist = :artist,
+                                   genre = :genre
+                            WHERE albumID = :albumID";
             }
+            else
+                $sql = "INSERT INTO albums (title,   year,  artist,  genre) VALUES (:title, :year, :artist, :genre);";
 
             $cmd = $conn->prepare($sql);
             $cmd->bindParam(':title', $title, PDO::PARAM_STR, 50);
@@ -29,7 +32,7 @@
             $cmd->bindParam(':genre', $genre, PDO::PARAM_STR, 20);
 
             if (!empty($albumID))
-                $cmd->bindParam('albumID', $albumID, PDO::PARAM_INT);
+                $cmd->bindParam(':albumID', $albumID, PDO::PARAM_INT);
 
             $cmd->execute();
 
@@ -39,4 +42,3 @@
         ?>
     </body>
 </html>
-<?php ob_flush(); ?>
